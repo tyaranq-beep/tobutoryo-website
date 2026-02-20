@@ -1,0 +1,827 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* --- Custom CSS Variables & Utils --- */
+:root {
+  --navy: #0F172A;
+  --gold: #CCA024;
+  --gold-light: #FDE68A;
+  --cream: #FAF9F6;
+}
+
+.gold-gradient {
+  background: #CCA024;
+}
+
+.glass-nav {
+  background: rgba(15, 23, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- Animations --- */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.fade-in.appear {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes bounce-custom {
+  0%, 100% { transform: translateY(0) translateX(-50%); }
+  50% { transform: translateY(12px) translateX(-50%); }
+}
+.animate-bounce-custom {
+  animation: bounce-custom 2.5s infinite;
+}
+
+/* --- FAQ Accordion --- */
+.faq-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+}
+.faq-content.open {
+  max-height: 500px;
+  opacity: 1;
+}
+.faq-icon {
+  transition: transform 0.3s ease;
+}
+.faq-icon.rotate {
+  transform: rotate(180deg);
+}
+
+/* Mobile Menu Transition */
+#mobile-menu {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform-origin: top;
+}
+</style>
+
+<script>
+  // Tailwind Configuration
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: '#0F172A',
+          gold: {
+            DEFAULT: '#CCA024',
+            light: '#FDE68A'
+          },
+          cream: '#FAF9F6'
+        },
+        fontFamily: {
+          sans: ['"Noto Sans JP"', 'sans-serif'],
+          serif: ['"Noto Serif JP"', 'serif'],
+        }
+      }
+    }
+  }
+</script>
+
+<div class="font-sans text-navy bg-cream">
+
+<!-- Navigation -->
+<nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500 bg-transparent py-6">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 gold-gradient rounded-sm flex items-center justify-center shadow-lg">
+                <img src="http://www.tobutoryo.com//img/logo.gif" alt="Company Logo" class="max-w-[40px] max-h-[40px] object-contain" />
+            </div>
+            <div class="flex flex-col">
+                <span class="text-2xl font-serif font-bold tracking-wider text-white">東部塗料株式会社</span>
+                <span class="text-[10px] font-sans font-light tracking-[0.3em] text-white/70 uppercase">TOBUTORYO</span>
+            </div>
+        </div>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center gap-8">
+            <a href="#case-studies" class="nav-link text-white/90 hover:text-gold transition-colors text-sm font-medium tracking-widest cursor-pointer">施工事例</a>
+            <a href="#pricing" class="nav-link text-white/90 hover:text-gold transition-colors text-sm font-medium tracking-widest cursor-pointer">料金体系</a>
+            <a href="#process" class="nav-link text-white/90 hover:text-gold transition-colors text-sm font-medium tracking-widest cursor-pointer">施工の流れ</a>
+            <a href="#testimonials" class="nav-link text-white/90 hover:text-gold transition-colors text-sm font-medium tracking-widest cursor-pointer">お客様の声</a>
+            <a href="#about" class="nav-link text-white/90 hover:text-gold transition-colors text-sm font-medium tracking-widest cursor-pointer">会社概要</a>
+            <a href="#contact" class="nav-link gold-gradient text-white px-8 py-3 rounded-sm text-xs font-bold tracking-[0.2em] hover:shadow-2xl hover:shadow-gold/20 transition-all uppercase cursor-pointer">無料見積り依頼</a>
+        </div>
+
+        <!-- Mobile Toggle Button -->
+        <button id="mobile-menu-btn" class="md:hidden text-white cursor-pointer" aria-label="メニューを開く">
+            <i data-lucide="menu"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="absolute top-full left-0 w-full bg-navy p-8 flex flex-col gap-6 md:hidden border-t border-white/10 opacity-0 pointer-events-none -translate-y-4">
+        <a href="#case-studies" class="nav-link text-white text-lg font-serif tracking-widest cursor-pointer">施工事例</a>
+        <a href="#pricing" class="nav-link text-white text-lg font-serif tracking-widest cursor-pointer">料金体系</a>
+        <a href="#process" class="nav-link text-white text-lg font-serif tracking-widest cursor-pointer">施工の流れ</a>
+        <a href="#testimonials" class="nav-link text-white text-lg font-serif tracking-widest cursor-pointer">お客様の声</a>
+        <a href="#about" class="nav-link text-white text-lg font-serif tracking-widest cursor-pointer">会社概要</a>
+        <a href="#contact" class="nav-link gold-gradient text-white py-5 rounded-sm font-bold tracking-widest text-center cursor-pointer">無料見積り依頼</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="relative h-screen w-full overflow-hidden flex items-center justify-center">
+    <div class="absolute inset-0 bg-navy">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="美しく塗装された住宅外観" class="w-full h-full object-cover scale-105" crossorigin="anonymous" />
+        <div class="absolute inset-0 bg-navy/60 backdrop-blur-[2px]"></div>
+    </div>
+
+    <div class="relative z-10 text-center px-6 max-w-5xl fade-in appear">
+        <span class="inline-block text-gold font-bold tracking-[0.5em] text-xs md:text-sm mb-8 uppercase">地域密着20年 ・ 施工実績3,000件超</span>
+        <h1 class="text-4xl md:text-7xl text-white font-serif leading-[1.1] mb-8">
+            なぜ、見積り金額が<br />
+            <span class="text-gold-light">会社によって違う</span>のか？
+        </h1>
+        <p class="text-white/70 text-base md:text-xl font-light mb-6 max-w-3xl mx-auto leading-relaxed tracking-wide">
+            足場・下地処理・塗布量まで、すべての内訳を公開。<br class="hidden md:block" />
+            一級塗装技能士が現地で診断し、根拠のある見積りをお出しします。
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-4 mb-10 text-white/50 text-xs tracking-widest">
+            <span class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold"></i> 見積り無料</span>
+            <span class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold"></i> 相見積り歓迎</span>
+            <span class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold"></i> 最短当日訪問</span>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <a href="#contact" class="nav-link gold-gradient text-white px-12 py-6 rounded-sm text-lg font-bold tracking-[0.2em] hover:scale-105 transition-transform shadow-2xl shadow-gold/40 cursor-pointer">
+                写真診断＋見積り無料
+            </a>
+            <a href="#case-studies" class="nav-link bg-white/5 backdrop-blur-xl border border-white/20 text-white px-12 py-6 rounded-sm text-lg font-bold tracking-[0.2em] hover:bg-white/10 transition-all cursor-pointer">
+                施工事例500件以上
+            </a>
+        </div>
+    </div>
+
+    <div class="absolute bottom-12 left-1/2 animate-bounce-custom text-white/40 flex flex-col items-center gap-3">
+        <span class="text-[10px] tracking-[0.4em] uppercase font-light">Discover</span>
+        <div class="w-[1px] h-16 bg-gradient-to-b from-white/40 to-transparent"></div>
+    </div>
+</section>
+
+<!-- Trust Badges -->
+<section id="quality" class="py-20 bg-navy border-y border-white/5 fade-in">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-12">
+            
+            <div class="flex flex-col items-center text-center space-y-5 group">
+                <div class="p-5 bg-white/5 rounded-full border border-white/10 group-hover:border-gold/50 transition-colors">
+                    <i data-lucide="award" class="w-10 h-10 text-gold"></i>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-white text-lg font-serif tracking-widest">一級塗装技能士</h4>
+                    <p class="text-[10px] text-white/40 tracking-[0.2em] uppercase">国家資格保持者が直接施工</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center text-center space-y-5 group">
+                <div class="p-5 bg-white/5 rounded-full border border-white/10 group-hover:border-gold/50 transition-colors">
+                    <i data-lucide="shield-check" class="w-10 h-10 text-gold"></i>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-white text-lg font-serif tracking-widest">最長15年保証</h4>
+                    <p class="text-[10px] text-white/40 tracking-[0.2em] uppercase">材料＋施工のW保証制度</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center text-center space-y-5 group">
+                <div class="p-5 bg-white/5 rounded-full border border-white/10 group-hover:border-gold/50 transition-colors">
+                    <i data-lucide="building-2" class="w-10 h-10 text-gold"></i>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-white text-lg font-serif tracking-widest">完全自社施工</h4>
+                    <p class="text-[10px] text-white/40 tracking-[0.2em] uppercase">中間マージン0の適正価格</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center text-center space-y-5 group">
+                <div class="p-5 bg-white/5 rounded-full border border-white/10 group-hover:border-gold/50 transition-colors">
+                    <i data-lucide="star" class="w-10 h-10 text-gold"></i>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-white text-lg font-serif tracking-widest">顧客満足度 98%</h4>
+                    <p class="text-[10px] text-white/40 tracking-[0.2em] uppercase">Google口コミ★4.7以上</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Before & After Section -->
+<section id="case-studies" class="py-32 bg-cream overflow-hidden fade-in">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+            <div class="max-w-2xl">
+                <span class="text-gold font-bold tracking-[0.3em] text-xs mb-4 block uppercase">Case Studies</span>
+                <h2 class="text-4xl md:text-6xl font-serif text-navy leading-tight">劇的な変化、<br />揺るぎない品質。</h2>
+            </div>
+            <p class="text-navy/60 max-w-md text-sm leading-relaxed tracking-wide">
+                私たちは単に色を塗るだけではありません。建物の寿命を延ばし、美観を極限まで高めるための「再生」を行います。
+            </p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-16">
+            <div class="space-y-8">
+                <!-- Before Image -->
+                <div class="relative group overflow-hidden rounded-sm shadow-2xl bg-navy/10 min-h-[300px] flex items-center justify-center">
+                    <div class="absolute top-6 left-6 z-10 bg-navy/90 text-white px-6 py-2 text-[10px] font-bold tracking-[0.2em] rounded-sm">BEFORE (施工前)</div>
+                    <img src="https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6" alt="施工前 - 外壁の劣化状態" class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-700" crossorigin="anonymous" />
+                    <div class="absolute inset-0 bg-black/20 pointer-events-none"></div>
+                </div>
+
+                <!-- After Image -->
+                <div class="relative group overflow-hidden rounded-sm shadow-2xl border-[12px] border-white bg-navy/10 min-h-[300px] flex items-center justify-center">
+                    <div class="absolute top-6 left-6 z-10 gold-gradient text-white px-6 py-2 text-[10px] font-bold tracking-[0.2em] rounded-sm">AFTER (施工後)</div>
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9" alt="施工後 - 美しく復元された外壁" class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-700" crossorigin="anonymous" />
+                </div>
+            </div>
+
+            <div class="flex flex-col justify-center space-y-10">
+                <div class="bg-white p-10 shadow-sm border-l-4 border-gold">
+                    <h3 class="text-2xl font-serif mb-4 text-navy">外壁の徹底洗浄・補修</h3>
+                    <p class="text-navy/70 leading-relaxed text-sm tracking-wide">高圧洗浄で長年の汚れを落とし、ひび割れ（クラック）を一つずつ丁寧に埋めていきます。この下地処理が塗装の寿命を左右します。</p>
+                </div>
+                <div class="bg-white p-10 shadow-sm border-l-4 border-gold">
+                    <h3 class="text-2xl font-serif mb-4 text-navy">三度塗りの完全履行</h3>
+                    <p class="text-navy/70 leading-relaxed text-sm tracking-wide">下塗り・中塗り・上塗りの3工程を厳守。メーカー規定の塗布量を守り、厚く強固な塗膜を形成して家を守ります。</p>
+                </div>
+                <div class="bg-white p-10 shadow-sm border-l-4 border-gold">
+                    <h3 class="text-2xl font-serif mb-4 text-navy">最高級シリコン・無機塗料</h3>
+                    <p class="text-navy/70 leading-relaxed text-sm tracking-wide">耐候性に優れた最新の塗料を使用。15年、20年と続く美しさと保護性能をお約束します。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section id="pricing" class="py-32 bg-white fade-in">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-20">
+            <span class="text-gold font-bold tracking-[0.3em] text-xs mb-4 block uppercase">Pricing</span>
+            <h2 class="text-4xl md:text-6xl font-serif text-navy mb-6">価格の「なぜ」を<br class="md:hidden" />すべて公開。</h2>
+            <p class="text-navy/60 max-w-2xl mx-auto text-sm leading-relaxed tracking-wide">
+                「思ったより高い」「安すぎて不安」——そんな経験はありませんか？<br />
+                東部塗料株式会社では、見積りの内訳をすべて開示し、適正価格の根拠を明確にします。
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-16">
+            <!-- Basic Plan -->
+            <div class="relative p-10 rounded-sm shadow-lg border border-navy/10 bg-cream">
+                <h3 class="text-2xl font-serif mb-2 text-navy">シリコンプラン</h3>
+                <p class="text-[10px] tracking-[0.2em] mb-6 text-navy/40 uppercase">コストパフォーマンス重視</p>
+                <div class="mb-2">
+                    <span class="text-4xl font-bold text-navy">59〜79万円</span>
+                    <span class="text-xs ml-2 text-navy/40">（税込）</span>
+                </div>
+                <p class="text-[10px] mb-8 text-navy/40 tracking-widest">延床30坪の場合 ／ 10年保証</p>
+                <ul class="space-y-3 mb-10 text-sm text-navy/70">
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> 高品質シリコン塗料</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> 3回塗り標準</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> 足場・洗浄込み</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> 近隣ご挨拶代行</li>
+                </ul>
+                <a href="#contact" class="nav-link block text-center py-4 rounded-sm font-bold tracking-[0.2em] text-sm cursor-pointer transition-all border border-navy/20 text-navy hover:bg-navy hover:text-white">
+                    このプランで見積りを依頼
+                </a>
+            </div>
+
+            <!-- Popular Plan -->
+            <div class="relative p-10 rounded-sm shadow-lg border border-gold bg-navy text-white transform md:-translate-y-4">
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 gold-gradient text-white text-[10px] font-bold px-6 py-1.5 rounded-full tracking-[0.2em] whitespace-nowrap">
+                    最も選ばれています
+                </div>
+                <h3 class="text-2xl font-serif mb-2 text-white">ラジカル制御プラン</h3>
+                <p class="text-[10px] tracking-[0.2em] mb-6 text-white/60 uppercase">人気No.1 ／ 美観と耐久の最適バランス</p>
+                <div class="mb-2">
+                    <span class="text-4xl font-bold text-gold">75〜98万円</span>
+                    <span class="text-xs ml-2 text-white/50">（税込）</span>
+                </div>
+                <p class="text-[10px] mb-8 text-white/50 tracking-widest">延床30坪の場合 ／ 12年保証</p>
+                <ul class="space-y-3 mb-10 text-sm text-white/80">
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> ラジカル制御塗料</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> 3回塗り＋下地補修込</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> シーリング打ち替え</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> 工程写真 全記録</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> カラーシミュレーション</li>
+                </ul>
+                <a href="#contact" class="nav-link block text-center py-4 rounded-sm font-bold tracking-[0.2em] text-sm cursor-pointer transition-all gold-gradient text-white hover:shadow-lg">
+                    このプランで見積りを依頼
+                </a>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="relative p-10 rounded-sm shadow-lg border border-navy/10 bg-cream">
+                <h3 class="text-2xl font-serif mb-2 text-navy">無機フッ素プラン</h3>
+                <p class="text-[10px] tracking-[0.2em] mb-6 text-navy/40 uppercase">最高級 ／ 長期メンテフリー</p>
+                <div class="mb-2">
+                    <span class="text-4xl font-bold text-navy">98〜130万円</span>
+                    <span class="text-xs ml-2 text-navy/40">（税込）</span>
+                </div>
+                <p class="text-[10px] mb-8 text-navy/40 tracking-widest">延床30坪の場合 ／ 15年保証</p>
+                <ul class="space-y-3 mb-10 text-sm text-navy/70">
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> 無機フッ素ハイブリッド塗料</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> 3回塗り＋全面下地処理</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> 付帯部すべて同塗料</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle-2" class="w-4 h-4 text-gold shrink-0"></i> 6ヶ月・1年・3年点検</li>
+                </ul>
+                <a href="#contact" class="nav-link block text-center py-4 rounded-sm font-bold tracking-[0.2em] text-sm cursor-pointer transition-all border border-navy/20 text-navy hover:bg-navy hover:text-white">
+                    このプランで見積りを依頼
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-cream p-8 rounded-sm border border-navy/5 text-center">
+            <p class="text-navy/60 text-xs tracking-wide leading-relaxed">
+                <strong class="text-navy">※ 上記はあくまで目安です。</strong> 実際の価格は、外壁の面積・劣化状況・塗料の種類により異なります。<br />
+                現地調査の上、面積計測→下地診断→シーリングm数算定を行い、<strong class="text-navy">足場・下地・塗布量まで内訳を明示</strong>した正確なお見積りをご提出します。
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Process Section -->
+<section id="process" class="py-32 bg-navy fade-in">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-20">
+            <span class="text-gold font-bold tracking-[0.3em] text-xs mb-4 block uppercase">Process</span>
+            <h2 class="text-4xl md:text-6xl font-serif text-white mb-6">お問い合わせから<br class="md:hidden" />完了まで。</h2>
+            <p class="text-white/50 max-w-2xl mx-auto text-sm leading-relaxed tracking-wide">
+                工程のすべてを「見える化」。進捗は写真付きで毎日ご報告します。
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-sm p-8 group hover:border-gold/40 transition-colors">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
+                        <i data-lucide="phone"></i>
+                    </div>
+                    <div>
+                        <span class="text-gold text-[10px] font-bold tracking-[0.3em]">STEP 01</span>
+                        <h3 class="text-white font-serif text-xl">お問い合わせ</h3>
+                    </div>
+                </div>
+                <p class="text-white/60 text-sm leading-relaxed tracking-wide mb-4">電話・LINE・フォームから。ご質問だけでもお気軽にどうぞ。</p>
+                <div class="flex items-center gap-2 text-gold/60 text-[10px] tracking-[0.2em]">
+                    <i data-lucide="clock" class="w-3 h-3"></i> 当日〜翌日
+                </div>
+            </div>
+
+            <div class="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-sm p-8 group hover:border-gold/40 transition-colors">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
+                        <i data-lucide="search"></i>
+                    </div>
+                    <div>
+                        <span class="text-gold text-[10px] font-bold tracking-[0.3em]">STEP 02</span>
+                        <h3 class="text-white font-serif text-xl">現地調査・診断</h3>
+                    </div>
+                </div>
+                <p class="text-white/60 text-sm leading-relaxed tracking-wide mb-4">一級塗装技能士が直接お伺い。面積計測、劣化診断、シーリングm数の算定を行います。</p>
+                <div class="flex items-center gap-2 text-gold/60 text-[10px] tracking-[0.2em]">
+                    <i data-lucide="clock" class="w-3 h-3"></i> 約60分
+                </div>
+            </div>
+
+            <div class="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-sm p-8 group hover:border-gold/40 transition-colors">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
+                        <i data-lucide="file-text"></i>
+                    </div>
+                    <div>
+                        <span class="text-gold text-[10px] font-bold tracking-[0.3em]">STEP 03</span>
+                        <h3 class="text-white font-serif text-xl">お見積り・ご提案</h3>
+                    </div>
+                </div>
+                <p class="text-white/60 text-sm leading-relaxed tracking-wide mb-4">足場・下地・塗料・付帯まで全て内訳を明示。最適な塗料と工法をご提案します。</p>
+                <div class="flex items-center gap-2 text-gold/60 text-[10px] tracking-[0.2em]">
+                    <i data-lucide="clock" class="w-3 h-3"></i> 3日以内
+                </div>
+            </div>
+
+            <div class="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-sm p-8 group hover:border-gold/40 transition-colors">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
+                        <i data-lucide="wrench"></i>
+                    </div>
+                    <div>
+                        <span class="text-gold text-[10px] font-bold tracking-[0.3em]">STEP 04</span>
+                        <h3 class="text-white font-serif text-xl">施工</h3>
+                    </div>
+                </div>
+                <p class="text-white/60 text-sm leading-relaxed tracking-wide mb-4">近隣ご挨拶 → 足場 → 洗浄 → 下地 → 3回塗。全工程を写真記録。</p>
+                <div class="flex items-center gap-2 text-gold/60 text-[10px] tracking-[0.2em]">
+                    <i data-lucide="clock" class="w-3 h-3"></i> 10〜14日
+                </div>
+            </div>
+
+            <div class="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-sm p-8 group hover:border-gold/40 transition-colors">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
+                        <i data-lucide="eye"></i>
+                    </div>
+                    <div>
+                        <span class="text-gold text-[10px] font-bold tracking-[0.3em]">STEP 05</span>
+                        <h3 class="text-white font-serif text-xl">完了検査・お引き渡し</h3>
+                    </div>
+                </div>
+                <p class="text-white/60 text-sm leading-relaxed tracking-wide mb-4">お客様立ち会いのもと仕上がりを確認。施工報告書・保証書をお渡しします。</p>
+                <div class="flex items-center gap-2 text-gold/60 text-[10px] tracking-[0.2em]">
+                    <i data-lucide="clock" class="w-3 h-3"></i> 最終日
+                </div>
+            </div>
+
+            <div class="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-sm p-8 group hover:border-gold/40 transition-colors">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
+                        <i data-lucide="shield"></i>
+                    </div>
+                    <div>
+                        <span class="text-gold text-[10px] font-bold tracking-[0.3em]">STEP 06</span>
+                        <h3 class="text-white font-serif text-xl">アフター点検</h3>
+                    </div>
+                </div>
+                <p class="text-white/60 text-sm leading-relaxed tracking-wide mb-4">6ヶ月・1年・3年の定期点検で塗膜の状態を確認。万が一の不具合にも迅速対応。</p>
+                <div class="flex items-center gap-2 text-gold/60 text-[10px] tracking-[0.2em]">
+                    <i data-lucide="clock" class="w-3 h-3"></i> 定期
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials" class="py-32 bg-cream fade-in">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-24">
+            <span class="text-gold font-bold tracking-[0.3em] text-xs mb-4 block uppercase">Testimonials</span>
+            <h2 class="text-4xl md:text-6xl font-serif text-navy mb-6">お客様が選んだ理由。</h2>
+            <div class="w-24 h-1 gold-gradient mx-auto"></div>
+        </div>
+        <div class="grid md:grid-cols-3 gap-12">
+            <div class="bg-white p-12 rounded-sm relative shadow-sm border border-navy/5">
+                <i data-lucide="quote" class="absolute top-8 right-10 text-gold/10 w-16 h-16"></i>
+                <div class="flex gap-1 mb-8 text-gold fill-gold">
+                    <i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i>
+                    <i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i>
+                    <i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i>
+                    <i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i>
+                    <i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i>
+                </div>
+                <p class="text-navy/80 mb-10 leading-relaxed italic text-sm tracking-wide">"3社で相見積りしましたが、東部塗料株式会社さんだけが足場代や下地処理の内訳まで細かく出してくれました。工事中も毎日写真が届き、安心してお任せできました。仕上がりは新築のようです。"</p>
+                <div class="border-t border-navy/10 pt-8">
+                    <p class="font-bold text-navy tracking-widest">S.K. 様</p>
+                    <p class="text-[10px] text-navy/40 tracking-[0.2em] uppercase mt-1">東京都世田谷区 ／ 築18年</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-12 rounded-sm relative shadow-sm border border-navy/5">
+                <i data-lucide="quote" class="absolute top-8 right-10 text-gold/10 w-16 h-16"></i>
+                <div class="flex gap-1 mb-8 text-gold fill-gold">
+                    <i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i><i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i><i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i><i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i><i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i>
+                </div>
+                <p class="text-navy/80 mb-10 leading-relaxed italic text-sm tracking-wide">"色選びが不安でしたが、シミュレーションと実際のA4サイズの色板で確認させてもらえたので安心でした。近所の方から『どこに頼んだの？』と聞かれるほどの仕上がりです。"</p>
+                <div class="border-t border-navy/10 pt-8">
+                    <p class="font-bold text-navy tracking-widest">T.E. 様</p>
+                    <p class="text-[10px] text-navy/40 tracking-[0.2em] uppercase mt-1">神奈川県横浜市 ／ 築22年</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-12 rounded-sm relative shadow-sm border border-navy/5">
+                <i data-lucide="quote" class="absolute top-8 right-10 text-gold/10 w-16 h-16"></i>
+                <div class="flex gap-1 mb-8 text-gold fill-gold">
+                    <i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i><i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i><i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i><i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i><i data-lucide="star" class="w-4 h-4 text-gold fill-gold"></i>
+                </div>
+                <p class="text-navy/80 mb-10 leading-relaxed italic text-sm tracking-wide">"他社の安い見積りと迷いましたが、塗布量や乾燥時間の説明が具体的で、ここなら間違いないと確信しました。工事後の6ヶ月点検でも丁寧に見ていただき、感謝しています。"</p>
+                <div class="border-t border-navy/10 pt-8">
+                    <p class="font-bold text-navy tracking-widest">I.M. 様</p>
+                    <p class="text-[10px] text-navy/40 tracking-[0.2em] uppercase mt-1">埼玉県さいたま市 ／ 築15年</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section id="faq" class="py-32 bg-white fade-in">
+    <div class="max-w-4xl mx-auto px-6">
+        <div class="text-center mb-20">
+            <span class="text-gold font-bold tracking-[0.3em] text-xs mb-4 block uppercase">FAQ</span>
+            <h2 class="text-4xl md:text-5xl font-serif text-navy mb-6">よくあるご質問</h2>
+            <p class="text-navy/60 text-sm tracking-wide">工事前のお悩みに、正直にお答えします。</p>
+        </div>
+
+        <div class="space-y-4">
+            <!-- FAQ 1 -->
+            <div class="faq-item border border-navy/10 rounded-sm overflow-hidden">
+                <button class="faq-btn w-full flex items-center justify-between px-8 py-6 text-left hover:bg-cream/50 transition-colors cursor-pointer outline-none">
+                    <span class="font-serif text-navy text-lg flex items-center gap-4">
+                        <i data-lucide="help-circle" class="w-5 h-5 text-gold shrink-0"></i>工事中、洗濯物は干せますか？
+                    </span>
+                    <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-gold"></i>
+                </button>
+                <div class="faq-content">
+                    <div class="px-8 pb-6 pt-2 pl-[4.5rem]">
+                        <p class="text-navy/70 text-sm leading-relaxed tracking-wide">高圧洗浄や塗装作業の日は飛散防止のためお控えいただいております。ただし、工事スケジュールを事前にお渡しし、洗濯可能な日を明示しますのでご安心ください。室内干しスペースがない場合はご相談ください。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="faq-item border border-navy/10 rounded-sm overflow-hidden">
+                <button class="faq-btn w-full flex items-center justify-between px-8 py-6 text-left hover:bg-cream/50 transition-colors cursor-pointer outline-none">
+                    <span class="font-serif text-navy text-lg flex items-center gap-4">
+                        <i data-lucide="help-circle" class="w-5 h-5 text-gold shrink-0"></i>塗料の臭いは気になりますか？
+                    </span>
+                    <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-gold"></i>
+                </button>
+                <div class="faq-content">
+                    <div class="px-8 pb-6 pt-2 pl-[4.5rem]">
+                        <p class="text-navy/70 text-sm leading-relaxed tracking-wide">水性塗料の場合、ほとんど臭いはありません。油性塗料を使用する場合も、作業は屋外ですので室内への影響は最小限です。敏感な方には水性塗料をお勧めしています。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item border border-navy/10 rounded-sm overflow-hidden">
+                <button class="faq-btn w-full flex items-center justify-between px-8 py-6 text-left hover:bg-cream/50 transition-colors cursor-pointer outline-none">
+                    <span class="font-serif text-navy text-lg flex items-center gap-4">
+                        <i data-lucide="help-circle" class="w-5 h-5 text-gold shrink-0"></i>近隣への影響が心配です
+                    </span>
+                    <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-gold"></i>
+                </button>
+                <div class="faq-content">
+                    <div class="px-8 pb-6 pt-2 pl-[4.5rem]">
+                        <p class="text-navy/70 text-sm leading-relaxed tracking-wide">着工前に弊社スタッフがご近隣のお宅へご挨拶に伺います。工事中の騒音・臭い・飛散対策についてもしっかりご説明します。これまで近隣トラブルの発生率は0%です。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item border border-navy/10 rounded-sm overflow-hidden">
+                <button class="faq-btn w-full flex items-center justify-between px-8 py-6 text-left hover:bg-cream/50 transition-colors cursor-pointer outline-none">
+                    <span class="font-serif text-navy text-lg flex items-center gap-4">
+                        <i data-lucide="help-circle" class="w-5 h-5 text-gold shrink-0"></i>追加費用が発生することはありますか？
+                    </span>
+                    <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-gold"></i>
+                </button>
+                <div class="faq-content">
+                    <div class="px-8 pb-6 pt-2 pl-[4.5rem]">
+                        <p class="text-navy/70 text-sm leading-relaxed tracking-wide">現地調査で正確に診断するため、追加費用の発生はほとんどありません。万が一、施工中に想定外の劣化が見つかった場合は、必ず事前にご相談し、ご了承をいただいてから進めます。勝手に追加請求は致しません。</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<!-- Company Overview -->
+<section id="about" class="py-32 bg-cream fade-in">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-24">
+            <span class="text-gold font-bold tracking-[0.3em] text-xs mb-4 block uppercase">About Us</span>
+            <h2 class="text-4xl md:text-6xl font-serif text-navy mb-6">会社概要</h2>
+            <div class="w-24 h-1 gold-gradient mx-auto"></div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8">
+                <p class="text-navy/70 leading-relaxed tracking-wide text-sm">
+                    東部塗料株式会社は、「住まいを守り、価値を高める」を企業理念に掲げ、一級塗装技能士を中心としたプロフェッショナル集団です。創業以来、地域密着型のサービスで数多くのお客様の大切な住まいを守り続けてきました。
+                </p>
+                <div class="space-y-6">
+                    <div class="flex border-b border-navy/10 pb-4"><span class="text-[10px] font-bold text-navy/40 uppercase tracking-[0.2em] w-32 shrink-0 pt-1">会社名</span><span class="text-navy/80 text-sm tracking-wide">株式会社 東部塗料株式会社（たくみのいろどり）</span></div>
+                    <div class="flex border-b border-navy/10 pb-4"><span class="text-[10px] font-bold text-navy/40 uppercase tracking-[0.2em] w-32 shrink-0 pt-1">代表取締役</span><span class="text-navy/80 text-sm tracking-wide">代表取締役</span></div>
+                    <div class="flex border-b border-navy/10 pb-4"><span class="text-[10px] font-bold text-navy/40 uppercase tracking-[0.2em] w-32 shrink-0 pt-1">設立</span><span class="text-navy/80 text-sm tracking-wide">2004年4月</span></div>
+                    <div class="flex border-b border-navy/10 pb-4"><span class="text-[10px] font-bold text-navy/40 uppercase tracking-[0.2em] w-32 shrink-0 pt-1">所在地</span><span class="text-navy/80 text-sm tracking-wide">〒340-0803 埼玉県八潮市上馬場471</span></div>
+                    <div class="flex border-b border-navy/10 pb-4"><span class="text-[10px] font-bold text-navy/40 uppercase tracking-[0.2em] w-32 shrink-0 pt-1">事業内容</span><span class="text-navy/80 text-sm tracking-wide">外壁塗装 / 屋根塗装 / 防水工事 / リフォーム</span></div>
+                    <div class="flex border-b border-navy/10 pb-4"><span class="text-[10px] font-bold text-navy/40 uppercase tracking-[0.2em] w-32 shrink-0 pt-1">資格</span><span class="text-navy/80 text-sm tracking-wide">一級塗装技能士 / 有機溶剤作業主任者</span></div>
+                </div>
+            </div>
+            <div class="bg-navy rounded-sm p-16 text-white text-center">
+                <div class="w-20 h-20 gold-gradient rounded-sm flex items-center justify-center mx-auto mb-8">
+                    <img src="http://www.tobutoryo.com//img/logo.gif" alt="Company Logo" class="max-w-[80px] max-h-[80px] object-contain" />
+                </div>
+                <h3 class="text-3xl font-serif mb-6">東部塗料株式会社</h3>
+                <p class="text-white/60 text-sm leading-relaxed tracking-wide mb-10">「塗装は、住まいの化粧。」<br />私たちは美しさだけでなく、<br />建物の寿命を延ばす「守り」の技術を<br />お届けします。</p>
+                <div class="flex justify-center gap-4">
+                    <div class="text-center"><p class="text-4xl font-bold text-gold">20+</p><p class="text-[10px] text-white/40 tracking-[0.2em] uppercase mt-2">年の実績</p></div>
+                    <div class="w-[1px] bg-white/10"></div>
+                    <div class="text-center"><p class="text-4xl font-bold text-gold">3,000+</p><p class="text-[10px] text-white/40 tracking-[0.2em] uppercase mt-2">施工件数</p></div>
+                    <div class="w-[1px] bg-white/10"></div>
+                    <div class="text-center"><p class="text-4xl font-bold text-gold">98%</p><p class="text-[10px] text-white/40 tracking-[0.2em] uppercase mt-2">満足度</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form -->
+<section id="contact" class="py-32 bg-navy relative overflow-hidden fade-in">
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2"></div>
+
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="bg-white rounded-sm overflow-hidden shadow-2xl flex flex-col lg:row-reverse lg:flex-row">
+            <div class="lg:w-2/5 gold-gradient p-16 text-white flex flex-col justify-between">
+                <div>
+                    <h2 class="text-3xl font-serif mb-6 leading-tight">まずは、写真1枚から。<br />お気軽にご相談ください。</h2>
+                    <p class="text-white/80 mb-10 leading-relaxed tracking-wide font-light text-sm">
+                        スマホで外壁を撮影して送るだけで、概算の目安をお伝えします。<br />現地調査からお見積りまで、すべて無料。相見積り大歓迎です。
+                    </p>
+                    <div class="flex flex-wrap gap-3 mb-12">
+                        <span class="bg-white/10 border border-white/20 text-xs px-4 py-2 rounded-full tracking-widest">見積り無料</span>
+                        <span class="bg-white/10 border border-white/20 text-xs px-4 py-2 rounded-full tracking-widest">相見積り歓迎</span>
+                        <span class="bg-white/10 border border-white/20 text-xs px-4 py-2 rounded-full tracking-widest">土日対応OK</span>
+                    </div>
+                </div>
+                <div class="space-y-8">
+                    <div class="flex items-center gap-6">
+                        <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
+                            <i data-lucide="phone"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] opacity-60 tracking-[0.2em] uppercase mb-1">受付 9:00〜18:00</p>
+                            <p class="text-2xl font-bold tracking-widest">048-995-2137</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
+                            <i data-lucide="mail"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] opacity-60 tracking-[0.2em] uppercase mb-1">Email</p>
+                            <p class="text-xl tracking-wide">info@tobutoryo.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:w-3/5 p-16">
+                <form class="space-y-8" onsubmit="event.preventDefault(); alert('お問い合わせを受け付けました。');">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-3">
+                            <label for="contact-name" class="text-[10px] font-bold text-navy/40 uppercase tracking-[0.3em]">お名前</label>
+                            <input id="contact-name" type="text" required class="w-full bg-cream border-b border-navy/10 py-4 px-2 focus:border-gold outline-none transition-colors" placeholder="山田 太郎" />
+                        </div>
+                        <div class="space-y-3">
+                            <label for="contact-phone" class="text-[10px] font-bold text-navy/40 uppercase tracking-[0.3em]">お電話番号</label>
+                            <input id="contact-phone" type="tel" required class="w-full bg-cream border-b border-navy/10 py-4 px-2 focus:border-gold outline-none transition-colors" placeholder="090-0000-0000" />
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <label for="contact-email" class="text-[10px] font-bold text-navy/40 uppercase tracking-[0.3em]">メールアドレス</label>
+                        <input id="contact-email" type="email" required class="w-full bg-cream border-b border-navy/10 py-4 px-2 focus:border-gold outline-none transition-colors" placeholder="example@mail.com" />
+                    </div>
+                    <div class="space-y-3">
+                        <label for="contact-message" class="text-[10px] font-bold text-navy/40 uppercase tracking-[0.3em]">ご相談内容</label>
+                        <textarea id="contact-message" required class="w-full bg-cream border-b border-navy/10 py-4 px-2 focus:border-gold outline-none h-32 transition-colors resize-none" placeholder="外壁の劣化状況や、ご希望の施工時期などをご記入ください。写真添付も歓迎です。"></textarea>
+                    </div>
+                    <button type="submit" class="w-full gold-gradient text-white py-6 rounded-sm font-bold text-lg tracking-[0.3em] shadow-xl shadow-gold/20 hover:scale-[1.01] transition-transform uppercase cursor-pointer">
+                        無料見積りを申し込む
+                    </button>
+                    <p class="text-[10px] text-center text-navy/30 tracking-widest">
+                        ※送信後、24時間以内に専門スタッフよりご連絡を差し上げます。
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-navy pt-32 pb-16 text-white/40">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-4 gap-20 mb-32">
+            <div class="col-span-2">
+                <div class="flex items-center gap-3 mb-10">
+                    <div class="w-10 h-10 gold-gradient rounded-sm flex items-center justify-center">
+                        <img src="http://www.tobutoryo.com//img/logo.gif" alt="Company Logo" class="max-w-[40px] max-h-[40px] object-contain" />
+                    </div>
+                    <span class="text-3xl font-serif font-bold text-white tracking-widest">東部塗料株式会社</span>
+                </div>
+                <p class="max-w-md mb-12 leading-relaxed tracking-wide text-sm">私たちは、単に色を塗るだけでなく、お客様の大切な資産である「住まい」を守り、その価値を永続させることを使命としています。</p>
+            </div>
+            <div>
+                <h5 class="text-white font-bold mb-10 uppercase tracking-[0.3em] text-xs">Navigation</h5>
+                <ul class="space-y-6 text-sm tracking-widest">
+                    <li><a href="#case-studies" class="hover:text-gold transition-colors cursor-pointer">施工事例</a></li>
+                    <li><a href="#pricing" class="hover:text-gold transition-colors cursor-pointer">料金体系</a></li>
+                    <li><a href="#process" class="hover:text-gold transition-colors cursor-pointer">施工の流れ</a></li>
+                    <li><a href="#testimonials" class="hover:text-gold transition-colors cursor-pointer">お客様の声</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-white font-bold mb-10 uppercase tracking-[0.3em] text-xs">Contact</h5>
+                <ul class="space-y-6 text-sm tracking-wide">
+                    <li class="flex items-center gap-4"><i data-lucide="phone" class="w-5 h-5 text-gold"></i> 048-995-2137</li>
+                    <li class="flex items-center gap-4"><i data-lucide="mail" class="w-5 h-5 text-gold"></i> info@tobutoryo.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-white/5 pt-16 text-center">
+            <p class="text-[10px] tracking-[0.2em] uppercase">© 2026 東部塗料株式会社 - TOBUTORYO. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+</div> <!-- End wrapper -->
+
+<!-- JS Logic for Interactivity -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Initialize Icons
+    lucide.createIcons();
+
+    // 2. Navbar glass effect on scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('glass-nav', 'py-3');
+            navbar.classList.remove('py-6', 'bg-transparent');
+        } else {
+            navbar.classList.add('py-6', 'bg-transparent');
+            navbar.classList.remove('glass-nav', 'py-3');
+        }
+    });
+
+    // 3. Mobile Menu Toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let isMenuOpen = false;
+
+    menuBtn.addEventListener('click', () => {
+        isMenuOpen = !isMenuOpen;
+        if(isMenuOpen){
+            mobileMenu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+            mobileMenu.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            menuBtn.innerHTML = '<i data-lucide="x"></i>';
+            lucide.createIcons();
+        } else {
+            mobileMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+            mobileMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            menuBtn.innerHTML = '<i data-lucide="menu"></i>';
+            lucide.createIcons();
+        }
+    });
+
+    // Close mobile menu on clicking a link
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+             if(isMenuOpen){
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                menuBtn.innerHTML = '<i data-lucide="menu"></i>';
+                lucide.createIcons();
+                isMenuOpen = false;
+             }
+        });
+    });
+
+
+    // 4. FAQ Accordion Logic
+    const faqBtns = document.querySelectorAll('.faq-btn');
+    faqBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const parent = this.parentElement;
+            const content = parent.querySelector('.faq-content');
+            const icon = parent.querySelector('.faq-icon');
+            const isOpen = content.classList.contains('open');
+
+            // Close all other FAQs
+            document.querySelectorAll('.faq-content').forEach(c => c.classList.remove('open'));
+            document.querySelectorAll('.faq-item .faq-icon').forEach(i => i.classList.remove('rotate'));
+            
+            // Toggle current FAQ
+            if (!isOpen) {
+                content.classList.add('open');
+                icon.classList.add('rotate');
+            }
+        });
+    });
+
+    // 5. Scroll Fade-in Animation Observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('appear');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+});
+</script>
